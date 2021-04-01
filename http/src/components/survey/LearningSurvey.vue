@@ -29,6 +29,7 @@
         <p
           v-if="invalidInput"
         >One or more input fields are invalid. Please check your provided data.</p>
+        <p v-if='error'>{{error}}</p>
         <div>
           <base-button>Submit</base-button>
         </div>
@@ -38,15 +39,18 @@
 </template>
 
 <script>
+import axios from 'axios'; // at the start of your <script> tag, before you "export default ..."
+
 export default {
   data() {
     return {
       enteredName: '',
       chosenRating: null,
       invalidInput: false,
+      error: null,
     };
   },
-  emits: ['survey-submit'],
+  // emits: ['survey-submit'],
   methods: {
     submitSurvey() {
       if (this.enteredName === '' || !this.chosenRating) {
@@ -54,10 +58,16 @@ export default {
         return;
       }
       this.invalidInput = false;
-
-      this.$emit('survey-submit', {
-        userName: this.enteredName,
+      this.error = null;
+      axios.post('https://learning-vue-d6595-default-rtdb.firebaseio.com/surveys.json', {
+        name: this.enteredName,
         rating: this.chosenRating,
+      }).then(response =>{
+          if (response.status >= 300 && response.status <200){
+            throw new Error('Could not save data!')
+          }
+      }).catch((error) =>{
+        this.error = error.message;
       });
 
       this.enteredName = '';
