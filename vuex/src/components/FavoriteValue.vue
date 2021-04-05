@@ -4,15 +4,13 @@
 
 <script>
 export default {
-  name: "FavoriteValue",
+  name: 'FavoriteValue',
   computed: {
     counter() {
-      return this.$store.getters.normalizeCounter;
+      return this.$store.getters['counter/normalizeCounter'];
     }
   }
-}
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
