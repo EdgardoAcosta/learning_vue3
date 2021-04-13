@@ -3,7 +3,7 @@ import CoachDetail from '@/pages/coaches/CoachDetail';
 import CoachesList from '@/pages/coaches/CoachesList';
 import CoachRegistration from '@/pages/coaches/CoachRegistration';
 
-import ContactCoach from '@/pages/requets/ContactCoach';
+import ContactCoach from './pages/requets/ContactCoach';
 import RequestsReceived from '@/pages/requets/RequestsReceived';
 import NotFound from '@/pages/NotFound';
 
@@ -13,11 +13,11 @@ const router = createRouter({
     { path: '/', redirect: '/coaches' },
     { path: '/coaches', component: CoachesList },
     {
-      path: '/coaches/:id', component: CoachDetail,
+      path: '/coaches/:id',
+      props: true,
+      component: CoachDetail,
       children: [
-        {
-          path: '/contact', component: ContactCoach
-        }
+        { path: 'contact', component: ContactCoach }
       ]
     },
     { path: '/register', component: CoachRegistration },

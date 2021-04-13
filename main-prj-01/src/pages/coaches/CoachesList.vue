@@ -5,8 +5,8 @@
   <section>
     <base-card>
       <div class='controls'>
-        <button>Refresh</button>
-        <router-link to='/register'>Register as a couch</router-link>
+        <base-button mode='outline'>Refresh</base-button>
+        <base-button link to='/register'>Register as a couch</base-button>
       </div>
       <ul v-if='hasCouches'>
         <coach-item v-for='coach in filteredCoaches' :key='coach.id'
@@ -29,7 +29,7 @@ import BaseCard from '@/components/ui/BaseCard';
 
 export default {
   name: 'CoachesList',
-  components: { BaseCard, CoachItem },
+  components: {  BaseCard, CoachItem },
   computed: {
     filteredCoaches() {
       return this.$store.getters['coaches/coaches'];
