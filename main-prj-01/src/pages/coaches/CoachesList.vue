@@ -5,10 +5,13 @@
   <section>
     <base-card>
       <div class='controls'>
-        <base-button mode='outline'>Refresh</base-button>
+        <base-button mode='outline' @click='loadCoaches'>Refresh</base-button>
         <base-button v-if='!isCoach' link to='/register'>Register as a couch</base-button>
       </div>
-      <ul v-if='hasCouches'>
+      <div v-if='isLoading'>
+        <base-spinner></base-spinner>
+      </div>
+      <ul v-else-if='hasCouches'>
         <coach-item v-for='coach in filteredCoaches' :key='coach.id'
                     :id='coach.id'
                     :first-name='coach.firstName'
@@ -37,7 +40,9 @@ export default {
         frontend: true,
         backend: true,
         career: true
-      }
+      },
+      isLoading: false,
+      error : '',
     };
   },
   computed: {
@@ -58,7 +63,7 @@ export default {
       });
     },
     hasCouches() {
-      return this.$store.getters['coaches/hasCoaches'];
+      return !this.isLoading && this.$store.getters['coaches/hasCoaches'];
     },
     isCoach() {
       return this.$store.getters['coaches/isCoach'];
@@ -67,7 +72,19 @@ export default {
   methods: {
     setFilters(updatedFilters) {
       this.activeFilters = updatedFilters;
+    },
+    async loadCoaches() {
+      this.isLoading = true;
+      try {
+        await this.$store.dispatch('coaches/loadCoaches');
+      } catch (e) {
+        this.error = e.message || 'Something went wrong';
+      }
+      this.isLoading = false;
     }
+  },
+  created() {
+    this.loadCoaches();
   }
 
 };
